@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Sans&family=Geist+Mono&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,3 +21,10 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+    @apply appearance-none;
+    margin: 0;
+}
+
+
