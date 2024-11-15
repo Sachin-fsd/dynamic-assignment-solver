@@ -11,6 +11,52 @@ export default function Home() {
   const [rollNumber, setRollNumber] = useState("");
   const [course, setCourse] = useState("");
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handlePayment = async () => {
+    const res = await loadRazorpayScript();
+    if (!res) {
+      alert("Razorpay SDK failed to load. Please check your network connection.");
+      return;
+    }
+
+    const options = {
+      key: "rzp_live_kaU3jD9IXnmfzv", // Replace with your Razorpay Key ID
+      amount: 100, // Amount in smallest currency unit (e.g., 100 paise for INR 1.00)
+      currency: "INR",
+      name: "Assignment PDF",
+      description: "Payment for Assignment PDF",
+      handler: function (response) {
+        modifyAndDownloadPDF();
+        // alert("Payment successful! Your PDF is downloading...");
+      },
+      prefill: {
+        name: name,
+        email: `${rollNumber}@krmu.edu.in`,
+        // contact: "9999999999"
+      },
+      theme: {
+        color: "#00010a"
+      },
+      modal: {
+        ondismiss: function () {
+          // alert("Payment process was cancelled.");
+        }
+      }
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+
   const modifyAndDownloadPDF = async () => {
     try {
       // Fetch and load your PDF
@@ -21,7 +67,7 @@ export default function Home() {
       const pages = pdfDoc.getPages();
       const firstPage = pages[0];
       firstPage.drawText(name, { x: 75, y: 312, size: 12, color: rgb(0, 0, 0) });
-      firstPage.drawText(rollNumber, { x: 75, y: 285, size: 12, color: rgb(0, 0, 0) });
+      firstPage.drawText(rollNumber, { x: 74, y: 285, size: 12, color: rgb(0, 0, 0) });
       firstPage.drawText(course, { x: 150, y: 259, size: 12, color: rgb(0, 0, 0) });
 
       // Serialize the PDF to bytes
@@ -54,7 +100,7 @@ export default function Home() {
                 className="bg-transparent border-b-2 border-gray-300 focus:border-gray-500 p-2 w-full mt-1"
                 placeholder="Enter Your Name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value.toUpperCase())}
                 required
               />
             </li>
@@ -74,7 +120,7 @@ export default function Home() {
                 className="bg-transparent border-b-2 border-gray-300 focus:border-gray-500 p-2 w-full mt-1"
                 placeholder="Enter Course (FSD , DS)"
                 value={course}
-                onChange={(e) => setCourse(e.target.value)}
+                onChange={(e) => setCourse(e.target.value.toUpperCase())}
                 required
               />
             </li>
@@ -84,6 +130,7 @@ export default function Home() {
             <button
               type="button"
               className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-12 sm:h-14 px-5 sm:px-6 transform hover:scale-105"
+              // onClick={handlePayment}
               onClick={modifyAndDownloadPDF}
             >
               Get PDF
