@@ -80,7 +80,6 @@ export default function Home() {
       alert("some error occured TRY AGAIN");
       return null;
     }
-
   };
 
   return (
@@ -114,15 +113,17 @@ export default function Home() {
                 required
               />
             </li>
-            <li>
-              <input
-                type="text"
-                className="bg-transparent border-b-2 border-gray-300 focus:border-gray-500 p-2 w-full mt-1"
-                placeholder="Enter Course (FSD , DS)"
+            <li className="mb-2">
+              <select
+                className="bg-neutral-950 border-b-2 border-gray-300 focus:border-gray-500 p-2 w-full mt-1"
                 value={course}
                 onChange={(e) => setCourse(e.target.value.toUpperCase())}
                 required
-              />
+              >
+                <option value="">Select Course</option>
+                <option value="FSD">FSD</option>
+                <option value="DS">DS</option>
+              </select>
             </li>
           </ol>
 
@@ -139,6 +140,5 @@ export default function Home() {
         </form>
       </main>
     </div>
-
   );
 }
