@@ -10,6 +10,15 @@ export default function Home() {
   const [name, setName] = useState("");
   const [rollNumber, setRollNumber] = useState("");
   const [course, setCourse] = useState("");
+  const [showWarning, setShowWarning] = useState(true);
+
+  const handleAgree = () => {
+    setShowWarning(false);
+  };
+
+  const handleExit = () => {
+    window.location.href = "https://www.google.com"; // Navigate to another site
+  };
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -84,6 +93,33 @@ export default function Home() {
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      {showWarning && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-gradient-to-br from-gray-800 to-black p-8 rounded-xl shadow-2xl max-w-sm w-full border border-gray-700">
+            <h2 className="text-2xl font-extrabold text-red-500 mb-4 text-center">
+              ⚠️ Critical Warning ⚠️
+            </h2>
+            <p className="text-gray-300 mb-6 text-center">
+              This tool is provided "as is" and should be used at your own risk. The developers are not responsible for any misuse or incorrect usage.
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                className="bg-gray-600 text-gray-200 px-5 py-2 rounded-full hover:bg-gray-500 transition-all duration-200"
+                onClick={handleExit}
+              >
+                Exit
+              </button>
+              <button
+                className="bg-blue-700 text-white px-5 py-2 rounded-full hover:bg-blue-600 shadow-lg transform hover:scale-105 transition-all duration-200"
+                onClick={handleAgree}
+              >
+                Agree
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <p className="bg-yellow-300 text-xl font-semibold p-2 rounded-md text-center sm:text-left text-amber-700 hover:bg-yellow-400 transition-colors duration-200 ease-in-out">
           DS Practical File Chahiye
@@ -133,6 +169,7 @@ export default function Home() {
               className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-12 sm:h-14 px-5 sm:px-6 transform hover:scale-105"
               // onClick={handlePayment}
               onClick={modifyAndDownloadPDF}
+              disabled={showWarning} // Disable if modal is active
             >
               Get PDF
             </button>
