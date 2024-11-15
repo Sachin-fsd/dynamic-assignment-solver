@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.4.0",
     "file-saver": "^2.0.5",
     "next": "15.0.3",
     "pdf-lib": "^1.17.1",
