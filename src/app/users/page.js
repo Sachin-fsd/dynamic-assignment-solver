@@ -39,6 +39,7 @@ const Users = () => {
                             <th className="border border-gray-300 px-4 py-2">Roll Number</th>
                             <th className="border border-gray-300 px-4 py-2">Course</th>
                             <th className="border border-gray-300 px-4 py-2">Subject</th>
+                            <th className="border border-gray-300 px-4 py-2">Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,6 +49,7 @@ const Users = () => {
                                 <td className="border border-gray-300 px-4 py-2">{user.rollNumber}</td>
                                 <td className="border border-gray-300 px-4 py-2">{user.course}</td>
                                 <td className="border border-gray-300 px-4 py-2">{user.subject}</td>
+                                <td className="border border-gray-300 px-4 py-2">{user.createdAt}</td>
                             </tr>
                         ))}
                     </tbody>

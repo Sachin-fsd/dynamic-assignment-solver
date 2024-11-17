@@ -3,14 +3,18 @@
 import { useState } from "react";
 import { PDFDocument, rgb } from "pdf-lib";
 import { saveAs } from "file-saver"; // Install with `npm install file-saver`
-import { SaveUserData } from "../actions";
+import { SaveUserData, SendMessage } from "../actions";
 const samplePDF = "/data_structures_file.pdf";
 
 export default function DsPracticalFilePage() {
     const [name, setName] = useState("");
     const [rollNumber, setRollNumber] = useState("");
     const [course, setCourse] = useState("");
+    const [section, setSection] = useState("");
     const [showWarning, setShowWarning] = useState(true);
+    const [message, setMessage] = useState("");
+    const [messageSent, setMessageSent] = useState(false);
+    const [buttonState, setButtonState] = useState("idle"); // "idle", "loading", "success"
 
     const handleAgree = () => {
         setShowWarning(false);
@@ -66,6 +70,18 @@ export default function DsPracticalFilePage() {
         paymentObject.open();
     };
 
+    const handleClick = async () => {
+        if (buttonState === "loading") return; // Prevent multiple clicks
+        setButtonState("loading");
+        await SendMessage({ message });
+        // Simulate message sending
+        setTimeout(() => {
+            setButtonState("success");
+            // After a short delay, reset to "idle"
+            setTimeout(() => setButtonState("idle"), 2000);
+        }, 1500);
+    };
+
     const modifyAndDownloadPDF = async () => {
         try {
             // Fetch and load your PDF
@@ -77,7 +93,7 @@ export default function DsPracticalFilePage() {
             const firstPage = pages[0];
             firstPage.drawText(name, { x: 75, y: 312, size: 12, color: rgb(0, 0, 0) });
             firstPage.drawText(rollNumber, { x: 74, y: 285, size: 12, color: rgb(0, 0, 0) });
-            firstPage.drawText(course, { x: 150, y: 259, size: 12, color: rgb(0, 0, 0) });
+            firstPage.drawText(`${course} ${section ? `- ${section}` : ""}`, { x: 150, y: 259, size: 12, color: rgb(0, 0, 0) });
 
             // Serialize the PDF to bytes
             const pdfBytes = await pdfDoc.save();
@@ -85,7 +101,7 @@ export default function DsPracticalFilePage() {
             // Download the modified PDF
             const blob = new Blob([pdfBytes], { type: "application/pdf" });
             saveAs(blob, "DS_Practical_File.pdf");
-            await SaveUserData({ name, rollNumber, course, subject:"Data Structures" });
+            await SaveUserData({ name, rollNumber, course, subject: "Data Structures" });
         } catch (error) {
             alert("some error occured TRY AGAIN");
             return null;
@@ -160,8 +176,28 @@ export default function DsPracticalFilePage() {
                                 <option value="">Select Course</option>
                                 <option value="FSD">FSD</option>
                                 <option value="DS">DS</option>
+                                <option value="UI/UX">UI/UX</option>
+                                <option value="CYBER SECURITY">Cyber Security</option>
+                                <option value="AI & ML">AI & ML</option>
+                                <option value="CORE">CORE</option>
                             </select>
                         </li>
+                        {
+                            course == "AI & ML" || course == "CORE" ?
+                                <li className="mb-2">
+                                    <input
+                                        type="number"
+                                        className="bg-transparent border-b-2 border-gray-300 focus:border-gray-500 p-2 w-full mt-1"
+                                        placeholder="Enter Section"
+                                        value={section}
+                                        onChange={(e) => setSection(e.target.value)}
+                                        required
+                                    />
+                                </li>
+                                :
+                                null
+                        }
+
                     </ol>
 
                     <div className="flex gap-4 items-center flex-col sm:flex-row">
@@ -177,6 +213,32 @@ export default function DsPracticalFilePage() {
                     </div>
                 </form>
             </main>
+            <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+                <input className="bg-transparent border-2 rounded-lg p-3" placeholder="Talk to me" onInput={(e) => setMessage(e.target.value)} />
+                <button
+                    onClick={handleClick}
+                    className="relative w-12 h-12 flex items-center justify-center rounded-full bg-blue-500 text-white"
+                >
+                    {buttonState === "idle" && (
+                        <svg className="rotate-45" data-testid="geist-icon" height="16" strokeLinejoin="round" viewBox="0 0 16 16" width="16" style={{ color: `currentcolor` }}>
+                            <path d="M1 6L15 1L10 15L7.65955 8.91482C7.55797 8.65073 7.34927 8.44203 7.08518 8.34045L1 6Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="bevel" fill="transparent">
+                            </path>
+                        </svg>
+                    )}
+                    {buttonState === "loading" && (
+                        <div
+                            className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spinner"
+                            style={{ animation: "spinner 1s linear infinite" }}
+                        />
+                    )}
+                    {buttonState === "success" && (
+                        <svg data-testid="geist-icon" height="16" strokeLinejoin="round" viewBox="0 0 16 16" width="16" style={{ color: "currentcolor", animation: "fadeInTick 0.5s ease-out" }}>
+                            <path fillRule="evenodd" clipRule="evenodd" d="M15.5607 3.99999L15.0303 4.53032L6.23744 13.3232C5.55403 14.0066 4.44599 14.0066 3.76257 13.3232L4.2929 12.7929L3.76257 13.3232L0.969676 10.5303L0.439346 9.99999L1.50001 8.93933L2.03034 9.46966L4.82323 12.2626C4.92086 12.3602 5.07915 12.3602 5.17678 12.2626L13.9697 3.46966L14.5 2.93933L15.5607 3.99999Z" fill="currentColor">
+                            </path>
+                        </svg>
+                    )}
+                </button>
+            </footer>
         </div>
     );
 }

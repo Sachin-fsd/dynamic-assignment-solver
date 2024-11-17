@@ -14,3 +14,16 @@ export async function SaveUserData({ name, rollNumber, course, subject }) {
         return false;
     }
 }
+
+export async function SendMessage({ message }) {
+    try {
+        const client = await clientPromise;
+        const db = client.db(process.env.MONGODB_DB);
+        const collection = db.collection('messages');
+        const result = await collection.insertOne({ message, createdAt: new Date() })
+        return true;
+    } catch (error) {
+        console.error('Error in saving data:', error);
+        return false;
+    }
+}

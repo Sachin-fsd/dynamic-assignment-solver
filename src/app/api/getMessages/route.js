@@ -4,7 +4,8 @@ export async function GET(req) {
     try {
         const client = await clientPromise;
         const db = client.db("hojayega");
-        const collection = db.collection('users');
+        const collection = db.collection('messages');
+
         const users = await collection.find({}).sort({createdAt:-1}).toArray();
         return new Response(JSON.stringify(users), {
             status: 200,
@@ -13,7 +14,7 @@ export async function GET(req) {
 
     } catch (error) {
         console.error("Error fetching users:", error);
-        return new Response(JSON.stringify({ error: "Failed to fetch users" }), {
+        return new Response(JSON.stringify({ error: "Failed to fetch messages" }), {
             status: 500,
         });
     }
