@@ -85,7 +85,7 @@ export default function DsPracticalFilePage() {
             // Download the modified PDF
             const blob = new Blob([pdfBytes], { type: "application/pdf" });
             saveAs(blob, "DS_Practical_File.pdf");
-            await SaveUserData(`${name} ${rollNumber} ${course}`);
+            await SaveUserData({ name, rollNumber, course, subject:"Data Structures" });
         } catch (error) {
             alert("some error occured TRY AGAIN");
             return null;

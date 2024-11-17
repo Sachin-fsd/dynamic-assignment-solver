@@ -1,11 +1,13 @@
 'use server';
-import { appendFile } from 'fs/promises';
-import path from 'path';
 
-export async function SaveUserData(data) {
+import clientPromise from "@/lib/mongodb";
+
+export async function SaveUserData({ name, rollNumber, course, subject }) {
     try {
-        const filePath = path.join(process.cwd(), 'data.txt'); // Ensure correct path
-        await appendFile(filePath, `${data}\n`, 'utf8'); // Use fs.promises
+        const client = await clientPromise;
+        const db = client.db(process.env.MONGODB_DB);
+        const collection = db.collection('users');
+        const result = await collection.insertOne({ name, rollNumber, course, subject, createdAt: new Date() })
         return true;
     } catch (error) {
         console.error('Error in saving data:', error);
