@@ -49,7 +49,7 @@ const Users = () => {
                                 <td className="border border-gray-300 px-4 py-2">{user.rollNumber}</td>
                                 <td className="border border-gray-300 px-4 py-2">{user.course}</td>
                                 <td className="border border-gray-300 px-4 py-2">{user.subject}</td>
-                                <td className="border border-gray-300 px-4 py-2">{user.createdAt}</td>
+                                <td className="border border-gray-300 px-4 py-2">{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' }).format(new Date(user.createdAt))}</td>
                             </tr>
                         ))}
                     </tbody>

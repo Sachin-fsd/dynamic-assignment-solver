@@ -43,7 +43,7 @@ const MessagesPage = () => {
                         {messages.map((message, index) => (
                             <tr key={index}>
                                 <td className="border border-gray-300 px-4 py-2">{message.message}</td>
-                                <td className="border border-gray-300 px-4 py-2">{message.createdAt}</td>
+                                <td className="border border-gray-300 px-4 py-2">{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' }).format(new Date(message.createdAt))}</td>
                             </tr>
                         ))}
                     </tbody>

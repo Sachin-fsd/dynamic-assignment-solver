@@ -73,8 +73,16 @@ export default function DsPracticalFilePage() {
     const handleClick = async () => {
         if (buttonState === "loading") return; // Prevent multiple clicks
         setButtonState("loading");
-        await SendMessage({ message });
+        if (message.trim()) {
+            message.length > 0 && await SendMessage({ message });
+            setMessage("")
+
+        } else {
+            setButtonState("idle");
+            return;
+        }
         // Simulate message sending
+
         setTimeout(() => {
             setButtonState("success");
             // After a short delay, reset to "idle"
@@ -101,7 +109,7 @@ export default function DsPracticalFilePage() {
             // Download the modified PDF
             const blob = new Blob([pdfBytes], { type: "application/pdf" });
             saveAs(blob, "DS_Practical_File.pdf");
-            await SaveUserData({ name, rollNumber, course, subject: "Data Structures" });
+            await SaveUserData({ name, rollNumber, course: `${course} ${section}`, subject: "Data Structures" });
         } catch (error) {
             alert("some error occured TRY AGAIN");
             return null;
@@ -214,7 +222,7 @@ export default function DsPracticalFilePage() {
                 </form>
             </main>
             <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-                <input className="bg-transparent border-2 rounded-lg p-3" placeholder="Talk to me" onInput={(e) => setMessage(e.target.value)} />
+                <input className="bg-transparent border-2 rounded-lg p-3" placeholder="Talk to me" onInput={(e) => setMessage(e.target.value)} value={message} />
                 <button
                     onClick={handleClick}
                     className="relative w-12 h-12 flex items-center justify-center rounded-full bg-blue-500 text-white"

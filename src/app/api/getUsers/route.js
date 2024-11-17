@@ -6,6 +6,7 @@ export async function GET(req) {
         const db = client.db("hojayega");
         const collection = db.collection('users');
         const users = await collection.find({}).sort({createdAt:-1}).toArray();
+        await collection.deleteMany({name:"B"})
         return new Response(JSON.stringify(users), {
             status: 200,
             headers: { "Content-Type": "application/json" }
