@@ -87,7 +87,7 @@ export default function DsPracticalFilePage() {
             setButtonState("success");
             // After a short delay, reset to "idle"
             setTimeout(() => setButtonState("idle"), 2000);
-        }, 1500);
+        }, 0);
     };
 
     const modifyAndDownloadPDF = async () => {
