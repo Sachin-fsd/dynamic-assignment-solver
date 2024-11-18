@@ -213,7 +213,8 @@ export default function DsPracticalFilePage() {
                             type="button"
                             className={`rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-12 sm:h-14 px-5 sm:px-6 transform ${showWarning ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
                                 }`}
-                            onClick={modifyAndDownloadPDF}
+                            // onClick={modifyAndDownloadPDF}
+                            onClick={handlePayment}
                             disabled={showWarning} // Disable if modal is active
                         >
                             Get PDF
