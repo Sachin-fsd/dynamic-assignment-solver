@@ -1,8 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react"
-import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,7 +29,6 @@ export default function RootLayout({ children }) {
       >
         {children}
         <Analytics />
-        <ToastContainer />
       </body>
     </html>
   );

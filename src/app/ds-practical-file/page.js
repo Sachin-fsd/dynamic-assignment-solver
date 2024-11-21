@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { PDFDocument, rgb } from "pdf-lib";
 import { saveAs } from "file-saver"; // Install with `npm install file-saver`
 import { SaveUserData, SendMessage } from "../actions";
-import { toast } from "react-toastify";
 const samplePDF = "/data_structures_file.pdf";
 
 export default function DsPracticalFilePage() {
@@ -141,16 +140,7 @@ export default function DsPracticalFilePage() {
 
     const handleClick = async () => {
         if (!name || !course || !rollNumber ||!message.length) {
-            toast.error("Please fill out all details first!", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-            });
+            alert("Please fill details!");
             return;
         }
         if (buttonState === "loading") return; // Prevent multiple clicks
