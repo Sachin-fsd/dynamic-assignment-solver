@@ -15,12 +15,12 @@ export async function SaveUserData({ name, rollNumber, course, subject }) {
     }
 }
 
-export async function SendMessage({ message }) {
+export async function SendMessage({ message, name, rollNumber, course }) {
     try {
         const client = await clientPromise;
         const db = client.db(process.env.MONGODB_DB);
         const collection = db.collection('messages');
-        const result = await collection.insertOne({ message, createdAt: new Date() })
+        const result = await collection.insertOne({ message, createdAt: new Date(), name, rollNumber, course })
         return true;
     } catch (error) {
         console.error('Error in saving data:', error);

@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PDFDocument, rgb } from "pdf-lib";
 import { saveAs } from "file-saver"; // Install with `npm install file-saver`
 import { SaveUserData, SendMessage } from "../actions";
+import { toast } from "react-toastify";
 const samplePDF = "/data_structures_file.pdf";
 
 export default function DsPracticalFilePage() {
@@ -41,28 +42,59 @@ export default function DsPracticalFilePage() {
             return;
         }
 
+        // Send the data to the backend to create an order
+        const orderResponse = await fetch('/api/createOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                courseId: 1,
+                amount: 1, // Example: Amount to be paid (in smallest unit, e.g., paise for INR)
+            }),
+        });
+
+        const orderData = await orderResponse.json();
+
+        if (!orderData || !orderData.id) {
+            alert('Failed to create order. Please try again.');
+            return;
+        }
+
         const options = {
             key: "rzp_live_kaU3jD9IXnmfzv", // Replace with your Razorpay Key ID
-            amount: 100, // Amount in smallest currency unit (e.g., 100 paise for INR 1.00)
+            amount: 1, // Amount in smallest currency unit (e.g., 100 paise for INR 1.00)
             currency: "INR",
-            name: "Assignment PDF",
-            description: "Payment for Assignment PDF",
-            handler: function (response) {
-                modifyAndDownloadPDF();
-                // alert("Payment successful! Your PDF is downloading...");
+            name: "DS Practical File PDF",
+            description: "Payment for DS Practical File PDF",
+            order_id: orderData.id, // Use the order ID returned from your backend
+            handler: async function (response) {
+                // After successful payment, call the backend to verify the payment
+                const verifyResponse = await fetch('/api/verifyPayment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_signature: response.razorpay_signature,
+                    }),
+                });
+
+                const verifyData = await verifyResponse.json();
+                if (verifyData.success) {
+                    modifyAndDownloadPDF();
+                } else {
+                    alert('Payment verification failed. Please try again.');
+                }
             },
             prefill: {
                 name: name,
                 email: `${rollNumber}@krmu.edu.in`,
-                // contact: "9999999999"
             },
             theme: {
                 color: "#00010a"
-            },
-            modal: {
-                ondismiss: function () {
-                    // alert("Payment process was cancelled.");
-                }
             }
         };
 
@@ -70,11 +102,61 @@ export default function DsPracticalFilePage() {
         paymentObject.open();
     };
 
+
+    // const handlePayment = async () => {
+    //     const res = await loadRazorpayScript();
+    //     if (!res) {
+    //         alert("Razorpay SDK failed to load. Please check your network connection.");
+    //         return;
+    //     }
+
+    //     const options = {
+    //         key: "rzp_live_kaU3jD9IXnmfzv", // Replace with your Razorpay Key ID
+    //         amount: 100, // Amount in smallest currency unit (e.g., 100 paise for INR 1.00)
+    //         currency: "INR",
+    //         name: "Assignment PDF",
+    //         description: "Payment for Assignment PDF",
+    //         handler: function (response) {
+    //             modifyAndDownloadPDF();
+    //             // alert("Payment successful! Your PDF is downloading...");
+    //         },
+    //         prefill: {
+    //             name: name,
+    //             email: `${rollNumber}@krmu.edu.in`,
+    //             // contact: "9999999999"
+    //         },
+    //         theme: {
+    //             color: "#00010a"
+    //         },
+    //         modal: {
+    //             ondismiss: function () {
+    //                 // alert("Payment process was cancelled.");
+    //             }
+    //         }
+    //     };
+
+    //     const paymentObject = new window.Razorpay(options);
+    //     paymentObject.open();
+    // };
+
     const handleClick = async () => {
+        if (!name || !course || !rollNumber ||!message.length) {
+            toast.error("Please fill out all details first!", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            return;
+        }
         if (buttonState === "loading") return; // Prevent multiple clicks
         setButtonState("loading");
         if (message.trim()) {
-            message.length > 0 && await SendMessage({ message });
+            message.length > 0 && await SendMessage({ message, name, rollNumber, course });
             setMessage("")
 
         } else {

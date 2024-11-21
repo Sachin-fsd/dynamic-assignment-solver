@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -39,6 +39,26 @@ const MessagesPage = () => {
         }
     };
 
+    const handleDelete = async (id) => {
+        try {
+            const response = await fetch(`/api/deleteMessage`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id }),
+            });
+
+            if (response.ok) {
+                setMessages((prevMessages) => prevMessages.filter((message) => message._id !== id));
+            } else {
+                const errorData = await response.json();
+                console.error("Failed to delete message:", errorData.message);
+                alert("Failed to delete message");
+            }
+        } catch (error) {
+            console.error("Error deleting message:", error);
+        }
+    };
+
     return (
         <div className="container mx-auto p-4">
             {!isAuthenticated ? (
@@ -66,14 +86,37 @@ const MessagesPage = () => {
                             <thead>
                                 <tr>
                                     <th className="border border-gray-300 px-4 py-2">Message</th>
+                                    <th className="border border-gray-300 px-4 py-2">Name</th>
+                                    <th className="border border-gray-300 px-4 py-2">Roll Number</th>
+                                    <th className="border border-gray-300 px-4 py-2">Course</th>
                                     <th className="border border-gray-300 px-4 py-2">Time</th>
+                                    <th className="border border-gray-300 px-4 py-2">Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {messages.map((message, index) => (
-                                    <tr key={index}>
+                                {messages.map((message) => (
+                                    <tr key={message._id}>
                                         <td className="border border-gray-300 px-4 py-2">{message.message}</td>
-                                        <td className="border border-gray-300 px-4 py-2">{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' }).format(new Date(message.createdAt))}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{message.name}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{message.rollNumber}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{message.course}</td>
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            {new Intl.DateTimeFormat("en-US", {
+                                                year: "numeric",
+                                                month: "long",
+                                                day: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                second: "2-digit",
+                                                timeZoneName: "short",
+                                            }).format(new Date(message.createdAt))}
+                                        </td>
+                                        <td
+                                            onClick={() => handleDelete(message._id)}
+                                            className="border border-gray-300 px-4 py-2 text-red-600 cursor-pointer"
+                                        >
+                                            Delete
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
