@@ -1,12 +1,12 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { PDFDocument, rgb } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { saveAs } from "file-saver"; // Install with `npm install file-saver`
 import { SaveUserData, SendMessage } from "../actions";
-const samplePDF = "/data_structures_file.pdf";
+const samplePDF = "/java_ho_jayega.pdf";
 
-export default function DsPracticalFilePage() {
+export default function JavaPracticalFilePage() {
     const [name, setName] = useState("");
     const [rollNumber, setRollNumber] = useState("");
     const [course, setCourse] = useState("");
@@ -64,8 +64,8 @@ export default function DsPracticalFilePage() {
             key: "rzp_live_kaU3jD9IXnmfzv", // Replace with your Razorpay Key ID
             amount: 1, // Amount in smallest currency unit (e.g., 100 paise for INR 1.00)
             currency: "INR",
-            name: "DS Practical File PDF",
-            description: "Payment for DS Practical File PDF",
+            name: "Java Practical File PDF",
+            description: "Payment for Java Practical File PDF",
             order_id: orderData.id, // Use the order ID returned from your backend
             handler: async function (response) {
                 // After successful payment, call the backend to verify the payment
@@ -139,7 +139,7 @@ export default function DsPracticalFilePage() {
     // };
 
     const handleClick = async () => {
-        if (!name || !course || !rollNumber ||!message.length) {
+        if (!name || !course || !rollNumber || !message.length) {
             alert("Please fill details!");
             return;
         }
@@ -166,21 +166,23 @@ export default function DsPracticalFilePage() {
         try {
             // Fetch and load your PDF
             const existingPdfBytes = await fetch(samplePDF).then(res => res.arrayBuffer());
-            const pdfDoc = await PDFDocument.load(existingPdfBytes);
+            const pdfDoc = await PDFDocument.load(existingPdfBytes);  
+
+            const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
             // Modify PDF (assuming the details are added to the first page)
             const pages = pdfDoc.getPages();
             const firstPage = pages[0];
-            firstPage.drawText(name, { x: 75, y: 312, size: 12, color: rgb(0, 0, 0) });
-            firstPage.drawText(rollNumber, { x: 74, y: 285, size: 12, color: rgb(0, 0, 0) });
-            firstPage.drawText(`${course} ${section ? `- ${section}` : ""}`, { x: 150, y: 259, size: 12, color: rgb(0, 0, 0) });
+            firstPage.drawText(name, { x: 75, y: 175, size: 12, color: rgb(0, 0, 0) });
+            firstPage.drawText(rollNumber, { x: 74, y: 137, size: 12, color: rgb(0, 0, 0) });
+            firstPage.drawText(`${course} ${section ? `- ${section}` : ""}`, { x: 415, y: 300, size: 12, color: rgb(0, 0, 0),  font: boldFont, });
 
             // Serialize the PDF to bytes
             const pdfBytes = await pdfDoc.save();
 
             // Download the modified PDF
             const blob = new Blob([pdfBytes], { type: "application/pdf" });
-            saveAs(blob, "DS_Practical_File.pdf");
+            saveAs(blob, "Java_Practical_File.pdf");
             await SaveUserData({ name, rollNumber, course: `${course} ${section}`, subject: "Data Structures" });
         } catch (error) {
             alert("some error occured TRY AGAIN");
@@ -190,10 +192,10 @@ export default function DsPracticalFilePage() {
 
     return (
         <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-
+          
             <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
                 <p className="bg-yellow-300 text-xl font-semibold p-2 rounded-md text-center sm:text-left text-amber-700 hover:bg-yellow-400 transition-colors duration-200 ease-in-out">
-                    DS Practical File Chahiye
+                    Java Practical File Chahiye
                 </p>
                 <h1 className="font-bold text-6xl text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-400">
                     Ho Jayega
