@@ -69,7 +69,7 @@ export default function Home() {
             className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-teal-500 text-white p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 group"
           >
             <span className="text-lg font-bold group-hover:underline">Java Practical File</span>
-            <p className="text-sm text-blue-200 group-hover:text-blue-100 mt-2">Access DS practical here.</p>
+            <p className="text-sm text-blue-200 group-hover:text-blue-100 mt-2">Access Java practical here.</p>
           </Link>
           <Link
             href="/ds-practical-file"
