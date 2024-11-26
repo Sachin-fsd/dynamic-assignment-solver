@@ -261,7 +261,6 @@ export default function DsPracticalFilePage() {
                                 }`}
                             // onClick={modifyAndDownloadPDF}
                             onClick={modifyAndDownloadPDF}
-                            disabled={showWarning} // Disable if modal is active
                         >
                             Get PDF
                         </button>

@@ -166,7 +166,7 @@ export default function JavaPracticalFilePage() {
         try {
             // Fetch and load your PDF
             const existingPdfBytes = await fetch(samplePDF).then(res => res.arrayBuffer());
-            const pdfDoc = await PDFDocument.load(existingPdfBytes);  
+            const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
             const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
@@ -175,7 +175,7 @@ export default function JavaPracticalFilePage() {
             const firstPage = pages[0];
             firstPage.drawText(name, { x: 75, y: 175, size: 12, color: rgb(0, 0, 0) });
             firstPage.drawText(rollNumber, { x: 74, y: 137, size: 12, color: rgb(0, 0, 0) });
-            firstPage.drawText(`${course} ${section ? `- ${section}` : ""}`, { x: 415, y: 300, size: 12, color: rgb(0, 0, 0),  font: boldFont, });
+            firstPage.drawText(`${course} ${section ? `- ${section}` : ""}`, { x: 415, y: 300, size: 12, color: rgb(0, 0, 0), font: boldFont, });
 
             // Serialize the PDF to bytes
             const pdfBytes = await pdfDoc.save();
@@ -192,7 +192,7 @@ export default function JavaPracticalFilePage() {
 
     return (
         <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-          
+
             <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
                 <p className="bg-yellow-300 text-xl font-semibold p-2 rounded-md text-center sm:text-left text-amber-700 hover:bg-yellow-400 transition-colors duration-200 ease-in-out">
                     Java Practical File Chahiye
@@ -263,7 +263,6 @@ export default function JavaPracticalFilePage() {
                                 }`}
                             // onClick={modifyAndDownloadPDF}
                             onClick={modifyAndDownloadPDF}
-                            disabled={showWarning} // Disable if modal is active
                         >
                             Get PDF
                         </button>
