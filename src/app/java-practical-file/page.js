@@ -183,7 +183,7 @@ export default function JavaPracticalFilePage() {
             // Download the modified PDF
             const blob = new Blob([pdfBytes], { type: "application/pdf" });
             saveAs(blob, "Java_Practical_File.pdf");
-            await SaveUserData({ name, rollNumber, course: `${course} ${section}`, subject: "Data Structures" });
+            await SaveUserData({ name, rollNumber, course: `${course} ${section}`, subject: "Java Practicals" });
         } catch (error) {
             alert("some error occured TRY AGAIN");
             return null;
