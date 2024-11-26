@@ -69,14 +69,14 @@ export default function Home() {
             className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-teal-500 text-white p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 group"
           >
             <span className="text-lg font-bold group-hover:underline">Java Practical File</span>
-            <p className="text-sm text-blue-200 group-hover:text-blue-100 mt-2">Get all your Java work done.</p>
+            <p className="text-sm text-blue-200 group-hover:text-blue-100 mt-2">Access DS practical here.</p>
           </Link>
           <Link
             href="/ds-practical-file"
             className="flex flex-col items-center justify-center bg-gradient-to-br from-purple-600 to-pink-500 text-white p-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 group"
           >
             <span className="text-lg font-bold group-hover:underline">DS Practical File</span>
-            <p className="text-sm text-purple-200 group-hover:text-purple-100 mt-2">Access all DS assignments here.</p>
+            <p className="text-sm text-purple-200 group-hover:text-purple-100 mt-2">Access DS practical here.</p>
           </Link>
           {/* Add more links here as needed */}
         </div>

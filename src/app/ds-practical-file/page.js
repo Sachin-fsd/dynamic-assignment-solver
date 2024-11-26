@@ -174,7 +174,7 @@ export default function DsPracticalFilePage() {
             firstPage.drawText(name, { x: 75, y: 312, size: 12, color: rgb(0, 0, 0) });
             firstPage.drawText(rollNumber, { x: 74, y: 285, size: 12, color: rgb(0, 0, 0) });
             firstPage.drawText(`${course} ${section ? `- ${section}` : ""}`, { x: 150, y: 259, size: 12, color: rgb(0, 0, 0) });
-
+            
             // Serialize the PDF to bytes
             const pdfBytes = await pdfDoc.save();
 
